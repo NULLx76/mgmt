@@ -11,5 +11,3 @@ if platform.system() == "Linux" and "Ubuntu" in subprocess.check_output(["lsb_re
 
 else:
     print("Sorry this platform is not supported")
-
-
