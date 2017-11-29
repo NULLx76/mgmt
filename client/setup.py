@@ -15,7 +15,7 @@ EMAIL = 'victor@xirion.net'
 AUTHOR = 'Victor Roest'
 
 REQUIRED = [
-    'apt'
+    'python-apt'
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))
