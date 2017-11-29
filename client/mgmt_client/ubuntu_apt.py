@@ -148,7 +148,3 @@ def print_result(pkgs):
     text.append('=' * 100)
     return '\n'.join(text)
 
-
-pkgs = get_update_packages()
-print (print_result(pkgs))
-
