@@ -123,7 +123,8 @@ def print_result(pkgs):
     """
     Print package updates in a table
     """
-    security_updates = filter(lambda x: x.get('security'), pkgs)
+    #security_updates = filter(lambda x: x.get('security'), pkgs)
+    security_updates = [x for x in pkgs if x.get('security')]
     text = list()
     text.append('Check Time: %s' % strftime('%m/%d/%Y %H:%M:%S'))
     if not pkgs:
