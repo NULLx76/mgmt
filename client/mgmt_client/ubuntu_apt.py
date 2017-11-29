@@ -147,4 +147,3 @@ def print_result(pkgs):
                 '*' if pkg.get('security') else ''))
     text.append('=' * 100)
     return '\n'.join(text)
-
