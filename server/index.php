@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>mgmt</title>
     <meta charset="UTF-8">
 
 </head>
+
 <body>
 <h1>Inventory</h1>
 <?php
@@ -63,13 +65,17 @@ if ($resultset > 0) {
             ?>
             <tr class='success'>
                 <?php for ($i = 0; $i < count($columns); $i++): ?>
-                    <td> <?php
+                    <td>
+                        <?php
+                        /* If it is the MAC Address column format it accordingly
+                           Else just print the contents */
                         if ($column_counter == 0) {
                             echo int2macaddress($row[$columns[$column_counter++]]);
                         } else {
                             echo $row[$columns[$column_counter++]];
                         }
-                        ?> </td>
+                        ?>
+                    </td>
                 <?php endfor; ?>
             </tr>
         <?php } ?>
@@ -81,4 +87,5 @@ if ($resultset > 0) {
     <h4> Information Not Available </h4>
 <?php } ?>
 </body>
+
 </html>
