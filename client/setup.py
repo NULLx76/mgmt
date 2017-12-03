@@ -1,9 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import io
 import os
-import sys
 
 from setuptools import find_packages, setup
 

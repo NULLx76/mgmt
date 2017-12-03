@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 import platform
 import subprocess
 import pymysql as mysql
