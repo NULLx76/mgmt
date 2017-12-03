@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import platform
+from platform import system
 import subprocess
-import pymysql as mysql
+from pymysql import connect
 import uuid
 import socket
 
@@ -19,13 +19,14 @@ ip = s.getsockname()[0]
 hostname = socket.gethostname()
 
 # Get Operating System
-if platform.system() == "Linux":
+if system() == "Linux":
     os = subprocess.check_output(["lsb_release", "-ds"]).decode()
+    os = os.rstrip()  # removes new lines
 else:
     os = "Other"
 
 # Connect to Database
-conn = mysql.connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt_pass')
+conn = connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt_pass')
 
 # Check if system exists in DB, if not the case then it will add it
 try:
@@ -83,5 +84,6 @@ if "Ubuntu" in os:
 else:
     print("Sorry this platform is not supported")
 
+print("Done!")
 # Close mysql connection
 conn.close()

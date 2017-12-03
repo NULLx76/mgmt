@@ -14,9 +14,7 @@ Following functions are used to return package info of available updates.
 See: /usr/lib/update-notifier/apt_check.py
 """
 SYNAPTIC_PINFILE = "/var/lib/synaptic/preferences"
-DISTRO = subprocess.check_output(["lsb_release", "-c", "-s"],
-                                 universal_newlines=True).strip()
-
+DISTRO = subprocess.check_output(["lsb_release", "-c", "-s"], universal_newlines=True).strip()
 
 def clean(cache,depcache):
     """ unmark (clean) all changes from the given depcache """
