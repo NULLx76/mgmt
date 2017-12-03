@@ -5,6 +5,7 @@
     <title>mgmt</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -80,7 +81,7 @@ if ($resultset > 0) {
                 <?php endfor; ?>
 
                 <td>
-                    <a href="#" onclick="javascript:reboot(<?php echo $row[$columns[0]];?>);">Reboot</a>
+                    <a href="#" onclick="reboot(<?php echo $row[$columns[0]];?>);">Reboot</a>
                 </td>
             </tr>
         <?php } ?>
