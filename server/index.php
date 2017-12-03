@@ -4,7 +4,7 @@
 <head>
     <title>mgmt</title>
     <meta charset="UTF-8">
-
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
 <body>
@@ -54,8 +54,9 @@ if ($resultset > 0) {
             <th>IP</th>
             <th>Hostname</th>
             <th>OS</th>
-            <th>Pending Upgrades</th>
-            <th>Security</th>
+            <th>Pending Updates</th>
+            <th>Pending Security Updates</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -63,7 +64,7 @@ if ($resultset > 0) {
         foreach ($resultset as $index => $row) {
             $column_counter = 0;
             ?>
-            <tr class='success'>
+            <tr>
                 <?php for ($i = 0; $i < count($columns); $i++): ?>
                     <td>
                         <?php
@@ -77,6 +78,10 @@ if ($resultset > 0) {
                         ?>
                     </td>
                 <?php endfor; ?>
+
+                <td>
+                    <a href="#" onclick="javascript:reboot(<?php echo $row[$columns[0]];?>);">Reboot</a>
+                </td>
             </tr>
         <?php } ?>
 
@@ -86,6 +91,13 @@ if ($resultset > 0) {
 <?php } else { ?>
     <h4> Information Not Available </h4>
 <?php } ?>
+
+<script type="text/javascript">
+    function reboot(mac) {
+        console.log(mac);
+    }
+</script>
+
 </body>
 
 </html>
