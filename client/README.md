@@ -1,3 +1,11 @@
 # mgmt Client
 
-This program is installed on the client computers and communicates back to the server to provide information or recieve commands
+This is the client portion of the mgmt program and will put the client information in a MySQL Database
+
+
+### TODO:
+* Receive commands(?)
+    * For updating packages
+    * Rebooting
+    * Etc.
+* Expand TODO lists
