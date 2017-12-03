@@ -1,15 +1,15 @@
 # mgmt
-mgmt is VM Mangement software.
-It has 2 packages:
+mgmt is an Update Mangement program.
+It has two parts:
 
 * mgmt Server
 * mgmt Client
 
-as the names suggest the client package is installed on the client server and sends information to the server,
-the server package recieves this information and may send commands to connected clients.
+The server is a webpage which shows the status of the clients and can issue commands to them.
+
 
 ## Connection
-The connection is established through some sort of pre-agreed upon password/api-key, there is one key per server.
+As backend there is a mysql database running mariadb and there may be added direct server to client communication
 
 ## Client ID
-Clients can be IDed through either a UUID generated upon first start.
+Clients can be IDed through their MAC address inserted into the db upon first launch
