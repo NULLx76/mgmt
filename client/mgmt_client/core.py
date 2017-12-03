@@ -46,14 +46,32 @@ try:
             cursor.execute(sqlAddToUpdates, (str(uuid)))
 
     conn.commit()
-finally:
-    conn.close()
+except Exception as e:
+    print(e)
 
 # Check for package upgrades
 if "Ubuntu" in os:
     import ubuntu_apt
-    pkgs = ubuntu_apt.get_update_packages()
-    updates = len(pkgs)
-    security_updates = len([x for x in pkgs if x.get('security')])
+    fullcache = ubuntu_apt.get_update_packages()
+    pkgs = []
+    updates = len(fullcache)
+    security_updates = len([x for x in fullcache if x.get('security')])
+    for pkg in fullcache:
+        pkgs.append(pkg.get('name'))
+
+    try:
+        with conn.cursor() as cursor:
+            sqlUpdateUpdates = "UPDATE mgmt.updates " \
+                               "SET pending = %s, security = %s, packages = %s, fullcache = %s " \
+                               "WHERE MAC = %s"
+
+            cursor.execute(sqlUpdateUpdates,
+                           (str(updates), str(security_updates), str(pkgs), str(fullcache), str(uuid)))
+
+        conn.commit()
+    finally:
+        conn.close()
+
+
 else:
     print("Sorry this platform is not supported")
