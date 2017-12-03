@@ -68,17 +68,17 @@ if "Ubuntu" in OperatingSystem:
     for pkg in fullcache:
         pkgs.append(pkg.get('name'))
 
-    update_required = os.path.isfile("/var/run/reboot-required")
+    reboot_required = os.path.isfile("/var/run/reboot-required")
 
     # Pushes data to the mysql database
     try:
         with conn.cursor() as cursor:
             sqlUpdateUpdates = "UPDATE mgmt.updates " \
-                               "SET pending = %s, security = %s, packages = %s, fullcache = %s, update_required = %s " \
+                               "SET pending = %s, security = %s, packages = %s, fullcache = %s, reboot_required = %s " \
                                "WHERE MAC = %s"
 
             cursor.execute(sqlUpdateUpdates,
-                           (str(updates), str(security_updates), str(pkgs), str(fullcache), update_required, str(uuid)))
+                           (str(updates), str(security_updates), str(pkgs), str(fullcache), reboot_required, str(uuid)))
 
         conn.commit()
     except Exception as e:
