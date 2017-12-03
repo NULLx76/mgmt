@@ -24,12 +24,17 @@ if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
 
-$sql = "SELECT mgmt.inventory.MAC,INET_NTOA(mgmt.inventory.ip),mgmt.inventory.Hostname,mgmt.inventory.OS, mgmt.updates.`pending`, mgmt.updates.security FROM mgmt.inventory INNER JOIN mgmt.updates ON mgmt.inventory.MAC=mgmt.updates.MAC;";
+$sql = <<<EOT
+SELECT mgmt.inventory.MAC, INET_NTOA(mgmt.inventory.ip), mgmt.inventory.Hostname, mgmt.inventory.OS,
+mgmt.updates.`pending`, mgmt.updates.security 
+FROM mgmt.inventory 
+INNER JOIN mgmt.updates 
+ON mgmt.inventory.MAC=mgmt.updates.MAC;
+EOT;
 
 $result = $mysqli->query($sql);
 $columns = array();
 $resultset = array();
-
 
 while ($row = mysqli_fetch_assoc($result)) {
     if (empty($columns)) {
