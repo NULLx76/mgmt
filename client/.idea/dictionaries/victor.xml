@@ -2,6 +2,7 @@
   <dictionary name="victor">
     <words>
       <w>fullcache</w>
+      <w>mariadb</w>
       <w>mgmt</w>
       <w>pkgs</w>
       <w>roest</w>
