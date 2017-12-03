@@ -5,7 +5,6 @@ This is the client portion of the mgmt program and will put the client informati
 
 ### TODO:
 * Receive commands(?)
-    * Check if system needs reboot
     * For updating packages
     * Rebooting
     * Etc.
