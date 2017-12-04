@@ -4,17 +4,26 @@
 import os
 from platform import system
 import subprocess
+
+import sys
 from pymysql import connect
 import uuid
 import socket
+from _thread import *
+
+# API Key
+key = "123456"
+
+# Listening port
+PORT = 6667
 
 # Get Hardware UUID (Mac address in decimal)
 uuid = uuid.getnode()
 
 # Get ip
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(('80.60.83.220', 1))
-ip = s.getsockname()[0]
+socket_get_ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+socket_get_ip.connect(('80.60.83.220', 1))
+ip = socket_get_ip.getsockname()[0]
 
 # Get Hostname
 hostname = socket.gethostname()
@@ -30,10 +39,10 @@ else:
 # Check if system exists in DB, if not the case then it will add it
 def database_init():
     # Connect to the database
-    conn = connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt_pass')
+    db_conn = connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt_pass')
 
     try:
-        with conn.cursor() as cursor:
+        with db_conn.cursor() as cursor:
             # Inventory Table
             sqlCheckInventory = "SELECT 1 from mgmt.inventory WHERE MAC=%s LIMIT 1"
             cursor.execute(sqlCheckInventory, str(uuid))
@@ -54,17 +63,17 @@ def database_init():
                 sqlAddToUpdates = "INSERT INTO mgmt.updates (MAC) VALUES(%s)"
                 cursor.execute(sqlAddToUpdates, (str(uuid)))
 
-        conn.commit()
+        db_conn.commit()
     except Exception as e:
         print(e)
 
-    conn.close()
+    db_conn.close()
     print("Database Init Complete")
 
 # Check for package upgrades
 def check_updates():
     # Connect to database
-    conn = connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt_pass')
+    db_conn = connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt_pass')
 
     if "Ubuntu" in OperatingSystem:
         import ubuntu_apt
@@ -81,7 +90,7 @@ def check_updates():
 
         # Pushes data to the mysql database
         try:
-            with conn.cursor() as cursor:
+            with db_conn.cursor() as cursor:
                 sqlUpdateUpdates = "UPDATE mgmt.updates " \
                                    "SET pending = %s, security = %s, packages = %s, fullcache = %s, reboot_required = %s " \
                                    "WHERE MAC = %s"
@@ -89,19 +98,50 @@ def check_updates():
                 cursor.execute(sqlUpdateUpdates,
                                (str(updates), str(security_updates), str(pkgs), str(fullcache), reboot_required, str(uuid)))
 
-            conn.commit()
+            db_conn.commit()
         except Exception as e:
             print(e)
 
     else:
         print("Sorry this platform is not supported")
 
-    conn.close()
+    db_conn.close()
     print("Updates Checked!")
+
+def client_thread(conn):
+    while True:
+        data = conn.recv(1024)
+        data_d = data.decode().split(":")
+
+        reply = "err"
+
+        if key in data_d[0]:
+            if data_d[1] == "reboot":
+                print("Rebooted")
+                reply = key + ":" + "Reboot Successful"
+            elif data_d[1] == "update":
+                check_updates()
+                reply = key + ":" + "Updated Successful"
+        else:
+            reply = "err" + ":" + "Wrong Python API Key"
+
+        if not data: break
+        conn.sendall(reply.encode())
+    conn.close()
 
 if __name__ == "__main__":
     database_init()
     check_updates()
-    # TODO: Open socket to receive commands from php server (Maybe with API Key)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind(('', PORT))
+    except socket.error:
+        print (socket.error)
+        sys.exit()
+    s.listen(10)
 
+    while True:
+        conn, addr = s.accept()
+        start_new_thread(client_thread, (conn,))
 
+    s.close()
