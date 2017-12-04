@@ -5,4 +5,9 @@
  * Date: 12/4/17
  * Time: 1:01 PM
  */
-var_dump($_POST);
+
+if($_GET['action'] == "reboot" && $_GET['mac'] != null){
+    echo $_GET['mac'];
+    //TODO: Send reboot request to python
+
+}

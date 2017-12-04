@@ -9,28 +9,6 @@
 </head>
 
 <body>
-
-
-
-<script type="text/javascript">
-    function reboot(mac) {
-        mac = $(this).serialize();
-        $.ajax({
-            url: "handler.php",
-            type: "post",
-            data: mac,
-            success: function (response) {
-                console.log("success");
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            },
-            done: function (response) {
-                alert(response);
-            }
-        });
-    }
-</script>
 <h1>Inventory</h1>
 <?php
 error_reporting(E_ALL);
@@ -114,6 +92,22 @@ if ($resultset > 0) {
 <?php } else { ?>
     <h4> Information Not Available </h4>
 <?php } ?>
+<script type="text/javascript">
+    function reboot(mac) {
+        console.log(mac);
+        $.ajax({
+            url:"handler.php",
+            type:"GET",
+            data: {
+                mac: mac,
+                action: "reboot"
+            },
+            success:function (result) {
+                alert(result);
+            }
+        });
+    }
+</script>
 
 </body>
 
