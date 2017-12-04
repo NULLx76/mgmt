@@ -102,5 +102,6 @@ def check_updates():
 if __name__ == "__main__":
     database_init()
     check_updates()
+    # TODO: Open socket to receive commands from php server (Maybe with API Key)
 
 

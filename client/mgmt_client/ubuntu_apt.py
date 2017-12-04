@@ -8,6 +8,9 @@ import os
 import subprocess
 import sys
 
+"""
+Source (mostly) from https://gist.github.com/yumminhuang/8b1502a49d8b20a6ae70
+"""
 
 """
 Following functions are used to return package info of available updates.
