@@ -33,22 +33,26 @@ conn = connect(host='mariadb', port=3306, user='mgmt', db='mgmt', password='mgmt
 try:
     with conn.cursor() as cursor:
         # Inventory Table
+        # noinspection SyntaxError
         sqlCheckInventory = "SELECT 1 from mgmt.inventory WHERE MAC=%s LIMIT 1"
         cursor.execute(sqlCheckInventory, str(uuid))
 
         # If not in the inventory table add it
         if cursor.fetchone() is None:
             print("Adding to inventory")
+            # noinspection SyntaxError
             sqlAddToInventory = "INSERT INTO mgmt.inventory (MAC, IP, Hostname,OS) VALUES(%s, INET_ATON(%s), %s, %s)"
             cursor.execute(sqlAddToInventory, (str(uuid), str(ip), hostname, OperatingSystem))
 
         # Updates Table
+        # noinspection SyntaxError
         sqlCheckUpdates = "SELECT 1 from mgmt.updates WHERE MAC=%s LIMIT 1"
         cursor.execute(sqlCheckUpdates, str(uuid))
 
         # If not in the Updates table add it
         if cursor.fetchone() is None:
             print("Adding to Updates")
+            # noinspection SyntaxError
             sqlAddToUpdates = "INSERT INTO mgmt.updates (MAC) VALUES(%s)"
             cursor.execute(sqlAddToUpdates, (str(uuid)))
 
@@ -73,6 +77,7 @@ if "Ubuntu" in OperatingSystem:
     # Pushes data to the mysql database
     try:
         with conn.cursor() as cursor:
+            # noinspection SyntaxError
             sqlUpdateUpdates = "UPDATE mgmt.updates " \
                                "SET pending = %s, security = %s, packages = %s, fullcache = %s, reboot_required = %s " \
                                "WHERE MAC = %s"

@@ -95,7 +95,7 @@ def isSecurityUpgrade(pkg, depcache):
 
         for (file, index) in ver.file_list:
             for origin, archive in security_pockets:
-                if (file.archive == archive and file.origin == origin):
+                if file.archive == archive and file.origin == origin:
                     return True
         return False
     inst_ver = pkg.current_ver
