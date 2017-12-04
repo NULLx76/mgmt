@@ -81,7 +81,8 @@ if ($resultset > 0) {
                 <?php endfor; ?>
 
                 <td>
-                    <a href="#" onclick="reboot(<?php echo $row[$columns[0]];?>);">Reboot</a>
+                    <a href="#" onclick="action(<?php echo $row[$columns[0]];?>,'reboot');">Reboot</a>
+                    <a href="#" onclick="action(<?php echo $row[$columns[0]];?>,'update');">Check</a>
                 </td>
             </tr>
         <?php } ?>
@@ -93,19 +94,22 @@ if ($resultset > 0) {
     <h4> Information Not Available </h4>
 <?php } ?>
 <script type="text/javascript">
-    function reboot(mac) {
-        console.log(mac);
+    function action(mac, action) {
         $.ajax({
             url:"handler.php",
             type:"GET",
             data: {
                 mac: mac,
-                action: "reboot"
+                action: action
             },
             success:function (result) {
-                alert(result);
+                console.log(result)
+                //TODO: Nice push notification for the result
             }
         });
+        if(action === "update") {
+            location.reload(true);
+        }
     }
 </script>
 
