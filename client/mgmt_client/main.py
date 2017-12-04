@@ -108,16 +108,15 @@ def check_updates():
     db_conn.close()
     print("Updates Checked!")
 
-def client_thread(conn):
+def client_thread(conn,addr):
     while True:
         data = conn.recv(1024)
         data_d = data.decode().split(":")
 
-        reply = "err"
+        reply = "err:General Error"
 
         if key in data_d[0]:
             if data_d[1] == "reboot":
-                print("Rebooted")
                 reply = key + ":" + "Reboot Successful"
             elif data_d[1] == "update":
                 check_updates()
@@ -125,8 +124,10 @@ def client_thread(conn):
         else:
             reply = "err" + ":" + "Wrong Python API Key"
 
+
         if not data: break
         conn.sendall(reply.encode())
+        print("send \"" + reply + "\" to \"" + addr[0] + ':' + str(addr[1]) + "\"")
     conn.close()
 
 if __name__ == "__main__":
@@ -142,6 +143,6 @@ if __name__ == "__main__":
 
     while True:
         conn, addr = s.accept()
-        start_new_thread(client_thread, (conn,))
+        start_new_thread(client_thread, (conn,addr))
 
     s.close()
