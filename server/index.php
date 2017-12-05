@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>mgmt</title>
     <meta charset="UTF-8">
@@ -103,14 +102,12 @@ if ($resultset > 0) {
                 action: action
             },
             success:function (result) {
-                console.log(result)
+                console.log(result);
                 if(action === "update")
                     location.reload(true);
             }
         });
     }
 </script>
-
 </body>
-
 </html>
