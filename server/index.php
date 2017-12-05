@@ -86,9 +86,7 @@ if ($resultset > 0) {
                         ?>
                     </td>
                 <?php endfor; ?>
-
                 <td>
-
                     <a href="#" onclick="action(<?php echo $row[$columns[0]];?>,'update');"><img src="img/update.png" alt="Update Package Cache" title="Update Package Cache"></a>
                 </td>
             </tr>
