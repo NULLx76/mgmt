@@ -13,8 +13,7 @@
 <?php
 error_reporting(E_ALL);
 
-function int2macaddress($int)
-{
+function int2macaddress($int){
     $hex = base_convert($int, 10, 16);
     while (strlen($hex) < 12)
         $hex = '0' . $hex;
