@@ -27,7 +27,7 @@ if ($mysqli->connect_errno) {
 
 $sql = <<<EOT
 SELECT mgmt.inventory.MAC, INET_NTOA(mgmt.inventory.ip), mgmt.inventory.Hostname, mgmt.inventory.OS,
-mgmt.updates.`pending`, mgmt.updates.security 
+mgmt.updates.`pending`, mgmt.updates.security, mgmt.updates.reboot_required
 FROM mgmt.inventory 
 INNER JOIN mgmt.updates 
 ON mgmt.inventory.MAC=mgmt.updates.MAC;
@@ -55,7 +55,8 @@ if ($resultset > 0) {
             <th>OS</th>
             <th>Pending Updates</th>
             <th>Pending Security Updates</th>
-            <th>Action</th>
+            <th>Reboot Required</th>
+            <th>Update Cache</th>
         </tr>
         </thead>
         <tbody>
@@ -71,7 +72,15 @@ if ($resultset > 0) {
                            Else just print the contents */
                         if ($column_counter == 0) {
                             echo int2macaddress($row[$columns[$column_counter++]]);
-                        } else {
+                        } elseif ($column_counter == 6){
+                            if($row[$columns[$column_counter]]){
+                                $column_counter++;
+                                echo "Reboot Now: <a href=\"#\" class=\"reboot\" onclick=\"action(" . $row[$columns[0]] . ",'reboot');\"><img src=\"img/restart16x16.png\" alt=\"reboot\" title=\"Reboot\"></a>";
+                            }else{
+                                echo "Not required";
+                                $column_counter++;
+                            }
+                        }else {
                             echo $row[$columns[$column_counter++]];
                         }
                         ?>
@@ -79,8 +88,8 @@ if ($resultset > 0) {
                 <?php endfor; ?>
 
                 <td>
-                    <a href="#" class="reboot" onclick="action(<?php echo $row[$columns[0]];?>,'reboot');">reboot</a>
-                    <a href="#" onclick="action(<?php echo $row[$columns[0]];?>,'update');">Check</a>
+
+                    <a href="#" onclick="action(<?php echo $row[$columns[0]];?>,'update');"><img src="img/update.png" alt="Update Package Cache" title="Update Package Cache"></a>
                 </td>
             </tr>
         <?php } ?>
@@ -94,20 +103,26 @@ if ($resultset > 0) {
 <script type="text/javascript">
     //TODO: Nice push notification for the result
     function action(mac, action) {
-        $.ajax({
-            url:"handler.php",
-            type:"GET",
-            data: {
-                mac: mac,
-                action: action
-            },
-            success:function (result) {
-                console.log(result);
-                if(action === "update")
-                    location.reload(true);
-            }
-        });
+        if(confirm("Are you sure you want to " + action + "?")) {
+            $.ajax({
+                url: "handler.php",
+                type: "GET",
+                data: {
+                    mac: mac,
+                    action: action
+                },
+                success: function (result) {
+                    console.log(result)
+                    if (action === "update")
+                        location.reload(true);
+                }
+            });
+        }else {
+            //cancelled
+        }
     }
 </script>
+
 </body>
+
 </html>
