@@ -110,7 +110,7 @@ if ($resultset > 0) {
                     action: action
                 },
                 success: function (result) {
-                    console.log(result)
+                    console.log(result);
                     if (action === "update")
                         location.reload(true);
                 }
