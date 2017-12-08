@@ -88,6 +88,8 @@ def check_updates():
 
         reboot_required = os.path.isfile("/var/run/reboot-required")
 
+        print("Reboot required:" + reboot_required)
+
         # Pushes data to the mysql database
         try:
             with db_conn.cursor() as cursor:
