@@ -4,7 +4,13 @@
     <title>mgmt</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha256-R91pD48xW+oHbpJYGn5xR0Q7tMhH4xOrWn1QqMRINtA=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha256-yNbKY1y6h2rbVcQtf0b8lq4a+xpktyFc3pSYoGAY1qQ=" crossorigin="anonymous"></script>
+
+
 </head>
 
 <body>
@@ -75,7 +81,9 @@ if ($resultset > 0) {
                         } elseif ($column_counter == 6){
                             if($row[$columns[$column_counter]]){
                                 $column_counter++;
-                                echo "Reboot Now: <a href=\"#\" class=\"reboot\" onclick=\"action(" . $row[$columns[0]] . ",'reboot');\"><img src=\"img/restart16x16.png\" alt=\"reboot\" title=\"Reboot\"></a>";
+                                ?>
+                                Required: <a href="#" class="reboot" onclick="action(<?php $row[$columns[0]] ?>,'reboot');"><img src="img/restart16x16.png" alt="reboot" title="Reboot Now"></a>
+                        <?php
                             }else{
                                 echo "Not required";
                                 $column_counter++;
@@ -95,10 +103,15 @@ if ($resultset > 0) {
         </tbody>
     </table>
 
+    <div class='update' style='display:none'>Successfully updated</div>
+    <div class='reboot' style='display:none'>Successfully rebooted</div>
+
 <?php } else { ?>
     <h4> Information Not Available </h4>
 <?php } ?>
+<!--suppress JSUnusedGlobalSymbols -->
 <script type="text/javascript">
+
     //TODO: Nice push notification for the result
     function action(mac, action) {
         if(confirm("Are you sure you want to " + action + "?")) {
@@ -111,8 +124,11 @@ if ($resultset > 0) {
                 },
                 success: function (result) {
                     console.log(result);
-                    if (action === "update")
+                    toastr["success"](result);
+                    if(action === "update"){
+                    setTimeout(function () {
                         location.reload(true);
+                    }, 5000)}
                 }
             });
         }else {
@@ -120,7 +136,5 @@ if ($resultset > 0) {
         }
     }
 </script>
-
 </body>
-
 </html>

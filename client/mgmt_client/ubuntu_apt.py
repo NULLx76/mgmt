@@ -89,13 +89,13 @@ def get_update_packages():
 
 def isSecurityUpgrade(pkg, depcache):
 
-    def isSecurityUpgrade_helper(ver):
+    def isSecurityUpgrade_helper(verv):
         """ check if the given version is a security update (or masks one) """
         security_pockets = [("Ubuntu", "%s-security" % DISTRO),
                             ("gNewSense", "%s-security" % DISTRO),
                             ("Debian", "%s-updates" % DISTRO)]
 
-        for (file, index) in ver.file_list:
+        for (file, index) in verv.file_list:
             for origin, archive in security_pockets:
                 if file.archive == archive and file.origin == origin:
                     return True
