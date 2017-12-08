@@ -87,7 +87,6 @@ def get_update_packages():
 
     return pkgs
 
-
 def isSecurityUpgrade(pkg, depcache):
 
     def isSecurityUpgrade_helper(ver):

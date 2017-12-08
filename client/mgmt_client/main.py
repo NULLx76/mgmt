@@ -77,7 +77,6 @@ def check_updates():
 
     if "Ubuntu" in OperatingSystem:
         import ubuntu_apt
-
         fullcache = ubuntu_apt.get_update_packages()
         updates = len(fullcache)
         security_updates = len([x for x in fullcache if x.get('security')])
@@ -87,8 +86,6 @@ def check_updates():
             pkgs.append(pkg.get('name'))
 
         reboot_required = os.path.isfile("/var/run/reboot-required")
-
-        print("Reboot required:" + str(reboot_required))
 
         # Pushes data to the mysql database
         try:
@@ -122,7 +119,7 @@ def client_thread(conn,addr):
                 reply = key + ":" + "Reboot Successful"
             elif data_d[1] == "update":
                 check_updates()
-                reply = key + ":" + "Updated Successful"
+                reply = key + ":" + "Updated Successfully"
         else:
             reply = "err" + ":" + "Wrong Python API Key"
 
@@ -135,16 +132,20 @@ def client_thread(conn,addr):
 if __name__ == "__main__":
     database_init()
     check_updates()
+
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         s.bind(('', PORT))
     except socket.error:
         print (socket.error)
-        sys.exit()
+        s.close()
     s.listen(10)
 
-    while True:
-        conn, addr = s.accept()
-        start_new_thread(client_thread, (conn,addr))
-
-    s.close()
+    try:
+        while True:
+            conn, addr = s.accept()
+            start_new_thread(client_thread, (conn,addr))
+    except KeyboardInterrupt:
+        print("W: interrupt received, stopping...")
+    finally:
+        s.close()
