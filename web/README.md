@@ -1,6 +1,6 @@
-# mgmt Server
+# mgmt Web
 
-This is the server portion of the mgmt program and will show the database contents on a webpage
+This is the web portion of the mgmt program and will show the database contents on a webpage
 
 
 ### TODO:
