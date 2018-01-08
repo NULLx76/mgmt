@@ -1,3 +1,6 @@
+#DISCARD INFO
+# Rewrite of info needed
+
 # mgmt
 mgmt is an Update Mangement program.
 It has two parts:
